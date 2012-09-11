@@ -17,9 +17,15 @@
           {{> loginButtonsServicesRow}}
         {{/if}}
       {{else}}
-        <div class="no-services">No login services configured.</div>
+        {{> noLoginServicesLink}}
       {{/if}}
     {{/if}}
+  </div>
+</template>
+
+<template name="noLoginServicesLink">
+  <div class="login-link-and-dropdown-list">
+    <a class="login-link-text login-link-no-services">Add login services</a>
   </div>
 </template>
 
@@ -91,7 +97,9 @@
 
 <template name="loginButtonsServicesDropdown">
   <div class="login-link-and-dropdown-list">
-    <a class="login-link-text">Sign in</a>
+    <a class="login-link-text">
+      Login
+    </a>
     {{#if dropdownVisible}}
     <div id="login-dropdown-list" class="accounts-dialog">
       <a class="login-close-text">Close</a>
@@ -176,8 +184,40 @@
   {{/if}}
 </template>
 
+<template name="addLoginServicesDialog">
+  {{#if visible}}
+  <div id="add-login-services-dialog" class="accounts-dialog">
+    <div style="margin-top: 5px">
+      To get started with accounts easily, run:
+      <pre>meteor add accounts-password accounts-google accounts-facebook</pre>
+    </div>
+
+    <div style="margin-top: 10px">
+      You can also find a <a href="xcxc" target="_blank">full list of login provider packages</a>
+    </div>
+
+    <div style="margin-top: 10px">
+      <div class="login-button" id="add-login-services-dismiss-button">Dismiss</div>
+    </div>
+  </div>
+  {{/if}}
+</template>
+
+<template name="configureLoginServicesDialog">
+  {{#if visible}}
+  <div id="configure-login-services-dialog" class="accounts-dialog">
+    xcxc
+    <div style="margin-top: 10px">
+      <div class="login-button" id="configure-login-services-dismiss-button">Dismiss</div>
+    </div>
+  </div>
+  {{/if}}
+</template>
+
 <body>
   {{> resetPasswordForm}}
   {{> enrollAccountForm}}
   {{> justValidatedUserForm}}
+  {{> addLoginServicesDialog}}
+  {{> configureLoginServicesDialog}}
 </body>

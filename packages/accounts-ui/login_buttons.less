@@ -57,7 +57,7 @@
     height: 16px;
 }
 
-#login-buttons .no-services {
+.login-link-no-services {
     color: red;
 }
 
@@ -177,7 +177,8 @@
     float: left;
 }
 
-#enroll-account-form, #reset-password-form, #just-validated-user-form {
+/* xcxc change this into a class */
+#enroll-account-form, #reset-password-form, #just-validated-user-form, #add-login-services-dialog, #configure-login-services-dialog {
     z-index: 1000;
     position: fixed;
 
@@ -187,6 +188,21 @@
 
     top: 50%;
     margin-top: -40px; /* = approximately -height/2, though height can change */
+}
+
+/* xcxc is this a mixin? */
+@add-login-services-dialog-width: 650px;
+#add-login-services-dialog {
+    width: @add-login-services-dialog-width;
+    margin-left: -(@add-login-services-dialog-width
+                 + @login-buttons-accounts-dialog-padding-left) / 2;
+}
+
+@configure-login-services-dialog-width: 650px;
+#configure-login-services-dialog {
+    width: @add-login-services-dialog-width;
+    margin-left: -(@add-login-services-dialog-width
+                 + @login-buttons-accounts-dialog-padding-left) / 2;
 }
 
 #just-validated-dismiss-button {

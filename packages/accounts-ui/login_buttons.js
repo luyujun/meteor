@@ -11,6 +11,8 @@
   var RESET_PASSWORD_TOKEN_KEY = 'Meteor.loginButtons.resetPasswordToken';
   var ENROLL_ACCOUNT_TOKEN_KEY = 'Meteor.loginButtons.enrollAccountToken';
   var JUST_VALIDATED_USER_KEY = 'Meteor.loginButtons.justValidatedUser';
+  var ADD_LOGIN_SERVICES_DIALOG_VISIBLE = 'Meteor.loginButtons.addLoginServicesDialogVisible';
+  var CONFIGURE_LOGIN_SERVICES_DIALOG_VISIBLE = 'Meteor.loginButtons.configureLoginServicesDialogVisible';
 
   var resetSession = function () {
     Session.set(IN_SIGNUP_FLOW_KEY, false);
@@ -35,9 +37,7 @@
         Meteor.loginWithFacebook();
       } catch (e) {
         if (e instanceof Meteor.accounts.ConfigError)
-          alert("Facebook API key not set. Configure app details with "
-                + "Meteor.accounts.facebook.config() "
-                + "and Meteor.accounts.facebook.setSecret()");
+          Session.set(CONFIGURE_LOGIN_SERVICES_DIALOG_VISIBLE, true);
         else
           throw e;
       }
@@ -117,6 +117,39 @@
       return user.emails[0].email;
 
     return '';
+  };
+
+  //
+  // noLoginServicesLink template
+  //
+
+  Template.noLoginServicesLink.events = {
+    'click .login-link-text': function () {
+      var openCenteredPopup = function(url, width, height) {
+        var screenX = typeof window.screenX !== 'undefined'
+              ? window.screenX : window.screenLeft;
+        var screenY = typeof window.screenY !== 'undefined'
+              ? window.screenY : window.screenTop;
+        var outerWidth = typeof window.outerWidth !== 'undefined'
+              ? window.outerWidth : document.body.clientWidth;
+        var outerHeight = typeof window.outerHeight !== 'undefined'
+              ? window.outerHeight : (document.body.clientHeight - 22);
+
+        // Use `outerWidth - width` and `outerHeight - height` for help in
+        // positioning the popup centered relative to the current window
+        var left = screenX + (outerWidth - width) / 2;
+        var top = screenY + (outerHeight - height) / 2;
+        var features = ('width=' + width + ',height=' + height +
+                        ',left=' + left + ',top=' + top);
+
+        var newwindow = window.open(url, 'Login', features);
+        if (newwindow.focus)
+          newwindow.focus();
+        return newwindow;
+      };
+
+      Session.set(ADD_LOGIN_SERVICES_DIALOG_VISIBLE, true);
+    }
   };
 
 
@@ -336,7 +369,6 @@
     return Session.get(DROPDOWN_VISIBLE_KEY);
   };
 
-
   //
   // resetPasswordForm template
   //
@@ -455,6 +487,36 @@
       });
     }
   });
+
+  //
+  // addLoginServicesDialog template
+  //
+
+  Template.addLoginServicesDialog.events = {
+    'click #add-login-services-dismiss-button': function () {
+      Session.set(ADD_LOGIN_SERVICES_DIALOG_VISIBLE, false);
+    }
+  };
+
+  Template.addLoginServicesDialog.visible = function () {
+    return Session.get(ADD_LOGIN_SERVICES_DIALOG_VISIBLE);
+  };
+
+
+  //
+  // configureLoginServicesDialog template
+  //
+
+  Template.configureLoginServicesDialog.events = {
+    'click #configure-login-services-dismiss-button': function () {
+      Session.set(CONFIGURE_LOGIN_SERVICES_DIALOG_VISIBLE, false);
+    }
+  };
+
+  Template.configureLoginServicesDialog.visible = function () {
+    return Session.get(CONFIGURE_LOGIN_SERVICES_DIALOG_VISIBLE);
+  };
+
 
   //
   // helpers
